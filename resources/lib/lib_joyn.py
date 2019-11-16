@@ -18,6 +18,7 @@ from . import request_helper as request_helper
 from . import cache as cache
 from . import xbmc_helper as xbmc_helper
 from .mpd_parser import mpd_parser as mpd_parser
+import random
 
 if compat.PY2:
 	from urllib import urlencode
@@ -159,7 +160,8 @@ class lib_joyn(object):
 			'content_type'	: stream_type,
 		}
 		entitlement_request_headers = [('x-api-key', self.config['PSF_CONFIG']['default'][stream_type.lower()]['apiGatewayKey'])]
-
+		entitlement_request_headers.append((u'x-forwarded-for', u'53.{0}.{1}.{2}'.format(random.randint(0,255), random.randint(0,255), random.randint(0,255))))
+			
 		return request_helper.post_json(self.config['PSF_CONFIG']['default'][stream_type.lower()]['entitlementBaseUrl'] + CONST['ENTITLEMENT_URL'],
 					self.config, entitlement_request_data, entitlement_request_headers)
 
